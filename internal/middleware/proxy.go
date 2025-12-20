@@ -92,7 +92,7 @@ func ProxyFallback(upstreamHost string, forwardToProxy func(*http.Request, int) 
 					capturedResponseWriter.sendCapturedResponse()
 				}
 
-				stats := r.Context().Value("stats").(*Statistics)
+				stats := r.Context().Value(StatsKey).(*Statistics)
 				stats.Mutex.Lock()
 				stats.ProxiedConnections++
 				stats.ProxiedConnectionsPerEndpoint[r.URL.Path]++

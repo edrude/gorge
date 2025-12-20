@@ -11,6 +11,15 @@ permissions:
   contents: read
 
 jobs:
+  golangci-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8
+      - name: Run golangci-lint
+        uses: golangci/golangci-lint-action@1e7e51e771db61008b38414a730f564565cf7c20
+        with:
+          version: v2.7
+
   test:
     runs-on: ubuntu-latest
     steps:
@@ -24,7 +33,9 @@ jobs:
         run: go test -v ./...
 
   goreleaser:
-    needs: test
+    needs:
+      - golangci-lint
+      - test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -41,3 +52,5 @@ jobs:
           distribution: goreleaser
           version: latest
           args: release --snapshot --clean
+      - name: Run gorge
+        run: ./dist/gorge_linux_amd64_v1/gorge version

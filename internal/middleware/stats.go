@@ -6,6 +6,10 @@ import (
 	"time"
 )
 
+type ctxkey string
+
+const StatsKey ctxkey = "stats"
+
 type Statistics struct {
 	ActiveConnections             int
 	TotalConnections              int
