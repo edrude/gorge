@@ -18,13 +18,13 @@ package cmd
 import (
 	"fmt"
 	"log"
+	"os"
 	"path/filepath"
 	"strings"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 
-	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
 )
 
@@ -63,15 +63,13 @@ func initConfig(cmd *cobra.Command) error {
 		// Use config file from the flag.
 		v.SetConfigFile(cfgFile)
 	} else {
-		home, err := homedir.Dir()
+		home, err := os.UserHomeDir()
 		if err != nil {
 			return fmt.Errorf("failed to get home directory: %w", err)
 		}
 
-		homeConfig := filepath.Join(home, ".config")
-
 		// Search config in home directory with name ".gorge" (without extension).
-		v.AddConfigPath(homeConfig)
+		v.AddConfigPath(filepath.Join(home, ".config"))
 		v.AddConfigPath(".")
 		v.SetConfigName("gorge")
 		v.SetEnvKeyReplacer(strings.NewReplacer("-", "_"))
