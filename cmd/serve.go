@@ -130,7 +130,7 @@ You can also enable the caching functionality to speed things up.`,
 			x := customMiddleware.NewStatistics()
 			r.Use(func(next http.Handler) http.Handler {
 				return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-					ctx := context.WithValue(r.Context(), "stats", x)
+					ctx := context.WithValue(r.Context(), customMiddleware.StatsKey, x)
 					next.ServeHTTP(w, r.WithContext(ctx))
 				})
 			})
