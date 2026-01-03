@@ -25,7 +25,7 @@ func RequireUserAgent(next http.Handler) http.Handler {
 			}
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusBadRequest)
-			w.Write(jsonError)
+			_, _ = w.Write(jsonError)
 			return
 		}
 		next.ServeHTTP(w, r)

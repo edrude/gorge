@@ -103,10 +103,13 @@ func (s *FilesystemBackend) GetAllReleases() ([]*gen.Release, error) {
 }
 
 // MetadataToRelease converts release metadata into a Release object
-func MetadataToRelease(metadata *model.ReleaseMetadata) *gen.Release {
+func MetadataToRelease(metadata *model.ReleaseMetadata) (*gen.Release, error) {
 	var releaseMetadataInterface map[string]interface{}
 	inrec, _ := json.Marshal(metadata)
-	json.Unmarshal(inrec, &releaseMetadataInterface)
+	err := json.Unmarshal(inrec, &releaseMetadataInterface)
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal release metadata: %w", err)
+	}
 
 	return &gen.Release{
 		Slug: fmt.Sprintf("%s-%s", metadata.Name, metadata.Version),
@@ -128,7 +131,7 @@ func MetadataToRelease(metadata *model.ReleaseMetadata) *gen.Release {
 		Tags:      metadata.Tags,
 		Supported: false,
 		Pdk:       false,
-	}
+	}, err
 }
 
 func ModuleFromRelease(release *gen.Release) *gen.Module {
@@ -180,7 +183,10 @@ func (s *FilesystemBackend) AddRelease(releaseData []byte) (*gen.Release, error)
 			return release, nil
 		}
 	}
-	release := MetadataToRelease(metadata)
+	release, err := MetadataToRelease(metadata)
+	if err != nil {
+		return nil, err
+	}
 
 	md5Hash := md5.New()
 	sha256Hash := sha256.New()
@@ -408,7 +414,7 @@ func ReadReleaseMetadataFromBytes(data []byte) (*model.ReleaseMetadata, string, 
 	if err != nil {
 		return nil, "", fmt.Errorf("failed to create gzip reader: %v", err)
 	}
-	defer g.Close()
+	defer g.Close() // nolint: errcheck
 
 	tarReader := tar.NewReader(g)
 

@@ -33,7 +33,7 @@ func (w *capturedResponseWriter) Write(body []byte) (int, error) {
 
 func (w *capturedResponseWriter) sendCapturedResponse() {
 	w.ResponseWriter.WriteHeader(w.status)
-	w.ResponseWriter.Write(w.body.Bytes())
+	_, _ = w.ResponseWriter.Write(w.body.Bytes())
 }
 
 func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
