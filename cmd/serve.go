@@ -114,7 +114,10 @@ You can also enable the caching functionality to speed things up.`,
 						log.Log.Fatal(err)
 					}
 				}
-				os.Chown(config.ModulesDir, uid, gid)
+				err = os.Chown(config.ModulesDir, uid, gid)
+				if err != nil {
+					log.Log.Fatal(err)
+				}
 			}
 		}
 
@@ -283,13 +286,13 @@ You can also enable the caching functionality to speed things up.`,
 			r.Get("/readyz", func(w http.ResponseWriter, r *http.Request) {
 				w.Header().Set("Content-Type", "application/json")
 				w.WriteHeader(200)
-				w.Write([]byte(`{"message": "ok"}`))
+				_, _ = w.Write([]byte(`{"message": "ok"}`))
 			})
 
 			r.Get("/livez", func(w http.ResponseWriter, r *http.Request) {
 				w.Header().Set("Content-Type", "application/json")
 				w.WriteHeader(200)
-				w.Write([]byte(`{"message": "ok"}`))
+				_, _ = w.Write([]byte(`{"message": "ok"}`))
 			})
 
 			ctx, cancel := context.WithCancel(context.Background())

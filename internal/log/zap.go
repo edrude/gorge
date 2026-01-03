@@ -16,6 +16,6 @@ func Setup(dev bool) {
 	} else {
 		logger, _ = zap.NewProduction()
 	}
-	defer logger.Sync()
+	defer logger.Sync() // nolint:errcheck
 	Log = logger.Sugar()
 }
