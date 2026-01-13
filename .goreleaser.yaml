@@ -16,9 +16,12 @@ builds:
       - linux
       - windows
       - darwin
+    goarch:
+      - amd64
+      - arm64
 
 archives:
-  - format: tar.gz
+  - formats: [ "tar.gz" ]
     # this name template makes the OS and Arch compatible with the results of `uname`.
     name_template: >-
       {{ .ProjectName }}_
@@ -31,11 +34,11 @@ archives:
     # use zip for windows archives
     format_overrides:
       - goos: windows
-        format: zip
+        formats: [ "zip" ]
 
 nfpms:
-  - homepage: https://github.com/dadav/gorge
-    maintainer: dadav <dadav@protonmail.com>
+  - homepage: https://github.com/voxpupuli/gorge
+    maintainer: Vox Pupuli <voxpupuli@groups.io>
     description: |-
       Gorge is a puppet forge implementation in go.
     license: Apache 2.0
