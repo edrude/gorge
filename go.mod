@@ -5,7 +5,7 @@ go 1.24.0
 require (
 	github.com/a-h/templ v0.3.977
 	github.com/dadav/stampede v0.0.0-20241228173147-dd16def44490
-	github.com/go-chi/chi/v5 v5.2.4
+	github.com/go-chi/chi/v5 v5.2.5
 	github.com/go-chi/cors v1.2.2
 	github.com/go-chi/jwtauth/v5 v5.3.3
 	github.com/hashicorp/go-version v1.8.0
